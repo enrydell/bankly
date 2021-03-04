@@ -1,0 +1,6 @@
+require_relative 'aux'
+require_relative 'account'
+require_relative 'address'
+require_relative 'card'
+require_relative 'payment'
+require_relative 'transfer'
