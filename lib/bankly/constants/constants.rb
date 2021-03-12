@@ -24,6 +24,7 @@ module Bankly
   PAYMENT = 'bill-payment'
   VALIDATE = 'validate'
   CONFIRM = 'confirm'
+  DETAIL = 'detail'
 
   # Transfer
   BANKLIST = 'banklist'
