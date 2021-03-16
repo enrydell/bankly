@@ -25,5 +25,11 @@ module Bankly
       card = Model.new(response)
       card
     end
+
+    def update_contactless_config(proxy, boolean)
+      response = @request.patchWithHeader("#{@url}/#{CARDS}/#{proxy}/#{CONTACTLESS}?allowContactless=#{boolean}", {}, [json_header, api_v1_header])
+      card = Model.new(response)
+      card
+    end
   end
 end

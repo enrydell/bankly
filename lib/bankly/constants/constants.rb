@@ -19,6 +19,7 @@ module Bankly
   PHYSICAL = 'physical'
   ACTIVATE = 'activate'
   PCI = 'pci'
+  CONTACTLESS = 'contactless'
 
   # Payment
   PAYMENT = 'bill-payment'
