@@ -10,6 +10,12 @@ module Bankly
       card
     end
 
+    def request_virtual_card(body)
+      response = @request.postWithHeader("#{@url}/#{CARDS}/#{VIRTUAL}", body, [json_header, api_v1_header])
+      card = Model.new(response)
+      card
+    end
+
     def get_card(proxy)
       response = @request.get("#{@url}/#{CARDS}/#{proxy}", [json_header, api_v1_header])
     end

@@ -17,6 +17,7 @@ module Bankly
   # Cards
   CARDS = 'cards'
   PHYSICAL = 'physical'
+  VIRTUAL = 'virtual'
   ACTIVATE = 'activate'
   PCI = 'pci'
   CONTACTLESS = 'contactless'
