@@ -20,6 +20,12 @@ module Bankly
       response = @request.get("#{@url}/#{CARDS}/#{proxy}", [json_header, api_v1_header])
     end
 
+    def get_virtual_card(proxy, password)
+      response = @request.postWithHeader("#{@url}/#{CARDS}/#{proxy}/#{PCI}", { password: password }, [json_header, api_v1_header])
+      card = Model.new(response)
+      card
+    end
+
     def activate_card(proxy, body)
       response = @request.patchWithHeader("#{@url}/#{CARDS}/#{proxy}/#{ACTIVATE}", body, [json_header, api_v1_header])
       card = Model.new(response)
