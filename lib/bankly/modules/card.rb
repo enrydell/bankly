@@ -37,5 +37,11 @@ module Bankly
       card = Model.new(response)
       card
     end
+    
+    def update_card_password(proxy, new_password)
+      response = @request.patchWithHeader("#{@url}/#{CARDS}/#{proxy}/#{PASSWORD}", { password: new_password }, [json_header, api_v1_header])
+      card = Model.new(response)
+      card
+    end
   end
 end
