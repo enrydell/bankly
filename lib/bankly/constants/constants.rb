@@ -22,6 +22,7 @@ module Bankly
   PCI = 'pci'
   CONTACTLESS = 'contactless'
   PASSWORD = 'password'
+  STATUS = 'status'
 
   # Payment
   PAYMENT = 'bill-payment'
