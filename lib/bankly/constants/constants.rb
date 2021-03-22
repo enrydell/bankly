@@ -13,6 +13,8 @@ module Bankly
   ACCOUNTS = 'accounts'
   ACCOUNT = 'account'
   STATEMENT = 'statement'
+  BRANCH = 'branch'
+  NUMBER = 'number'
 
   # Cards
   CARDS = 'cards'

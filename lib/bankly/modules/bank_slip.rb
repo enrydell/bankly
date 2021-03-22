@@ -9,5 +9,9 @@ module Bankly
       bank_slip = Model.new(response)
       bank_slip
     end
+
+    def get_deposit_slip_data(branch, account, authentication_code)
+      response = @request.get("#{@url}/#{BANKSLIP}/#{BRANCH}/#{branch}/#{NUMBER}/#{account}/#{authentication_code}", [json_header, api_v1_header], true)
+    end
   end
 end
