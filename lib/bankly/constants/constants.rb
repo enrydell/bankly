@@ -33,4 +33,7 @@ module Bankly
   # Transfer
   BANKLIST = 'banklist'
   TRANSFER = 'fund-transfers'
+
+  # Bank Slip
+  BANKSLIP = 'bankslip'
 end
