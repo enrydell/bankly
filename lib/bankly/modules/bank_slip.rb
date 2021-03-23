@@ -13,5 +13,9 @@ module Bankly
     def get_deposit_slip_data(branch, account, authentication_code)
       response = @request.get("#{@url}/#{BANKSLIP}/#{BRANCH}/#{branch}/#{NUMBER}/#{account}/#{authentication_code}", [json_header, api_v1_header], true)
     end
+    
+    def get_deposit_slip_pdf(authentication_code)
+      response = @request.get("#{@url}/#{BANKSLIP}/#{authentication_code}/#{PDF}", [json_header, api_v1_header], true)
+    end
   end
 end

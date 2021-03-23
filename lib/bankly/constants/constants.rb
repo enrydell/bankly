@@ -38,4 +38,5 @@ module Bankly
 
   # Bank Slip
   BANKSLIP = 'bankslip'
+  PDF = 'pdf'
 end
