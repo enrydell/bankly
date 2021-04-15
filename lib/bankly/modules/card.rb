@@ -1,7 +1,7 @@
 module Bankly
   class Card < Aux
-    def initialize
-      start_module
+    def initialize(log_requests = false)
+      start_module(log_requests)
     end
 
     def request_card(body)

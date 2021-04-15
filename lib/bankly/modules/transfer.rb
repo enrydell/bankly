@@ -1,8 +1,7 @@
 module Bankly
   class Transfer < Aux
-
-    def initialize
-      start_module
+    def initialize(log_requests = false)
+      start_module(log_requests)
     end
 
     def list_banks

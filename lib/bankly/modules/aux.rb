@@ -2,10 +2,10 @@ module Bankly
   
   class Aux
     
-    def start_module
+    def start_module(log_requests)
       Auth.login
       
-      @request = Request.new
+      @request = Request.new(log_requests)
 
       @url = Rails.env.eql?('development') || Rails.env.eql?('homologation') ? URL_HML : URL_PROD
     end
@@ -34,7 +34,7 @@ module Bankly
         url = Rails.env.eql?('development') || Rails.env.eql?('homologation') ? LOGIN_HML : LOGIN_PROD
 
         puts url
-        request = Request.new({
+        request = Request.new(false, {
           'Content-Type' => 'application/x-www-form-urlencoded'
         })
         response = request.post("#{url}/#{TOKEN_PATH}", {
@@ -47,8 +47,6 @@ module Bankly
         p token
 
         Auth.save_token(token[:content]['access_token'])
-        # Request.set_token(token[:content])
-        # Helper.generate_general_response(token)
       end
     end
 
@@ -58,13 +56,6 @@ module Bankly
 				ENV['BANKLY_TOKEN_EXPIRY'] = (Time.now + 3600).to_s
 			end
     end
-    
-    # def self.refreshToken
-    #   if Auth.should_refresh_token?(@bearer)
-    #     @auth.generateToken
-    #     # @request = CdtRequest.new(nil, @basic)
-    #   end
-    # end
 
     def self.should_refresh_token?
 			finish_date = ENV['BANKLY_TOKEN_EXPIRY']
@@ -79,16 +70,15 @@ module Bankly
     require 'ostruct'
     require 'uri'
 
-    # To debug HTTParty, add this at the end
-    # debug_output: $stdout
-
-    def initialize(headers = nil)
+    def initialize(log_requests, headers = nil)
       unless headers.nil?
         @headers = headers
       else
         @headers = {}
         @headers['Authorization'] = ENV['BANKLY_TOKEN']
       end
+
+      @log_requests = log_requests
     end
 
     def post(url, body, use_json = false)
@@ -101,7 +91,13 @@ module Bankly
       else
         body = body.to_json
       end
-      req = HTTParty.post(url, body: body, headers: @headers)
+
+      unless @log_requests
+        req = HTTParty.post(url, body: body, headers: @headers)
+      else
+        req = HTTParty.post(url, body: body, headers: @headers, debug_output: $stdout)
+      end
+
       valid_response(req)
     end
 
@@ -112,7 +108,11 @@ module Bankly
 
       headers['Authorization'] = @headers['Authorization']
 
-      req = HTTParty.post(url, body: body, headers: headers)
+      unless @log_requests
+        req = HTTParty.post(url, body: body, headers: headers)
+      else
+        req = HTTParty.post(url, body: body, headers: headers, debug_output: $stdout)
+      end
 
       valid_response(req)
     end
@@ -133,7 +133,12 @@ module Bankly
         body = body.to_json
       end
 
-      req = HTTParty.post(url, body: body, headers: @headers)
+      unless @log_requests
+        req = HTTParty.post(url, body: body, headers: @headers)
+      else
+        req = HTTParty.post(url, body: body, headers: @headers, debug_output: $stdout)
+      end
+
       valid_response(req)
     end
 
@@ -145,7 +150,12 @@ module Bankly
         end
       end
 
-      req = HTTParty.put(url, headers: @headers, body: body.to_json)
+      unless @log_requests
+        req = HTTParty.put(url, headers: @headers, body: body.to_json)
+      else
+        req = HTTParty.put(url, headers: @headers, body: body.to_json, debug_output: $stdout)
+      end
+      
       valid_response(req)
     end
 
@@ -156,7 +166,11 @@ module Bankly
 
       headers['Authorization'] = @headers['Authorization']
 
-      req = HTTParty.put(url, body: body, headers: headers)
+      unless @log_requests
+        req = HTTParty.put(url, body: body, headers: headers)
+      else
+        req = HTTParty.put(url, body: body, headers: headers, debug_output: $stdout)
+      end
 
       valid_response(req)
     end
@@ -170,7 +184,13 @@ module Bankly
           end
         end
       end
-      req = HTTParty.get(url, headers: @headers, follow_redirects: follow_redirects)
+
+      unless @log_requests
+        req = HTTParty.get(url, headers: @headers, follow_redirects: follow_redirects)
+      else
+        req = HTTParty.get(url, headers: @headers, follow_redirects: follow_redirects, debug_output: $stdout)
+      end
+
       return req unless follow_redirects
 
       if skipValidation
@@ -187,7 +207,13 @@ module Bankly
           @headers[header[:key]] = header[:value]
         end
       end
-      req = HTTParty.patch(url, headers: @headers, body: body.to_json)
+
+      unless @log_requests
+        req = HTTParty.patch(url, headers: @headers, body: body.to_json)
+      else
+        req = HTTParty.patch(url, headers: @headers, body: body.to_json, debug_output: $stdout)
+      end
+      
       valid_response(req)
     end
 
@@ -207,7 +233,12 @@ module Bankly
         body = body.to_json
       end
 
-      req = HTTParty.patch(url, body: body, headers: @headers)
+      unless @log_requests
+        req = HTTParty.patch(url, body: body, headers: @headers)
+      else
+        req = HTTParty.patch(url, body: body, headers: @headers, debug_output: $stdout)
+      end
+      
       valid_response(req)
     end
 
@@ -217,11 +248,21 @@ module Bankly
           @headers[header[:key]] = header[:value]
         end
       end
+      
       if body.nil?
-        req = HTTParty.delete(url, headers: @headers)
+        unless @log_requests
+          req = HTTParty.delete(url, headers: @headers)
+        else
+          req = HTTParty.delete(url, headers: @headers, debug_output: $stdout)
+        end
       else
-        req = HTTParty.delete(url, headers: @headers, body: body.to_json)
+        unless @log_requests
+          req = HTTParty.delete(url, headers: @headers, body: body.to_json)
+        else
+          req = HTTParty.delete(url, headers: @headers, body: body.to_json, debug_output: $stdout)
+        end
       end
+
       valid_response(req)
     end
 
@@ -248,13 +289,6 @@ module Bankly
         Helper.generate_general_response({ message: 'Erro interno Baas', statusCode: 500 })
       end
     end
-
-    # def self.set_token(token)
-    #   if @headers.nil?
-    #     @headers = {}
-    #   end
-    #   @headers['Authorization'] = token
-    # end
 
   end
 
