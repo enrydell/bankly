@@ -17,5 +17,11 @@ module Bankly
     def get_slip_pdf(authentication_code)
       response = @request.get("#{@url}/#{BANKSLIP}/#{authentication_code}/#{PDF}", [json_header, api_v1_header], true)
     end
+
+    def cancel_slip(branch, account, authentication_code)
+      response = @request.delete("#{@url}/#{BANKSLIP}/#{cancel}", { authenticationCode: authentication_code, account: { number: account, branch: branch } }, [json_header, api_v1_header])
+      bank_slip = Model.new(response)
+      bank_slip
+    end
   end
 end
