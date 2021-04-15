@@ -19,7 +19,7 @@ module Bankly
     end
 
     def cancel_slip(branch, account, authentication_code)
-      response = @request.delete("#{@url}/#{BANKSLIP}/#{cancel}", { authenticationCode: authentication_code, account: { number: account, branch: branch } }, [json_header, api_v1_header])
+      response = @request.delete("#{@url}/#{BANKSLIP}/#{CANCEL}", { authenticationCode: authentication_code, account: { number: account, branch: branch } }, [json_header, api_v1_header])
       bank_slip = Model.new(response)
       bank_slip
     end
