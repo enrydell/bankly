@@ -5,7 +5,7 @@ module Bankly
     end
 
     def list_banks
-      response = @request.get("#{@url}/#{BANKLIST}", [json_header, api_v1_header], true)
+      response = @request.get("#{@url}/#{BANKLIST}", [json_header, api_v1_header, correlation_id], true)
     end
 
     def execute(body)

@@ -6,19 +6,19 @@ module Bankly
     end
 
     def create_person(document_number, body)
-      response = @request.put("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", body, [json_header, api_v1_header])
+      response = @request.put("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", body, [json_header, api_v1_header, correlation_id])
       person = Model.new(response)
       person
     end
 
     def update_person(document_number, body)
-      response = @request.patch("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", body, [json_header, api_v1_header])
+      response = @request.patch("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", body, [json_header, api_v1_header, correlation_id])
       person = Model.new(response)
       person
     end
 
     def get_person(document_number)
-      response = @request.get("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", [json_header, api_v1_header])
+      response = @request.get("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}", [json_header, api_v1_header, correlation_id])
       person = Model.new(response)
       person
     end
@@ -34,26 +34,26 @@ module Bankly
     end
 
     def get_files_statuses(document_number, file_tokens)
-      response = @request.get("#{@url}/#{DOCUMENT}/#{document_number.gsub(/[^0-9]/, '')}?resultLevel=DETAILED&#{file_tokens}", [json_header, api_v1_header], true)
+      response = @request.get("#{@url}/#{DOCUMENT}/#{document_number.gsub(/[^0-9]/, '')}?resultLevel=DETAILED&#{file_tokens}", [json_header, api_v1_header, correlation_id], true)
     end
 
     def create_bank_account(document_number, account_type = 'PAYMENT_ACCOUNT')
-      response = @request.postWithHeader("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}/#{ACCOUNTS}", { accountType: account_type }, [json_header, api_v1_header])
+      response = @request.postWithHeader("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}/#{ACCOUNTS}", { accountType: account_type }, [json_header, api_v1_header, correlation_id])
       account = Model.new(response)
       account
     end
 
     def get_bank_account(document_number)
-      response = @request.get("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}/#{ACCOUNTS}", [json_header, api_v1_header], true)
+      response = @request.get("#{@url}/#{CUSTOMERS}/#{document_number.gsub(/[^0-9]/, '')}/#{ACCOUNTS}", [json_header, api_v1_header, correlation_id], true)
     end
 
     def get_account_balance(bank_number)
-      response = @request.get("#{@url}/#{ACCOUNTS}/#{bank_number.gsub(/[^0-9]/, '')}?includeBalance=true", [json_header, api_v1_header], true)
+      response = @request.get("#{@url}/#{ACCOUNTS}/#{bank_number.gsub(/[^0-9]/, '')}?includeBalance=true", [json_header, api_v1_header, correlation_id], true)
     end
 
     def get_account_statements(bank_agency, bank_number, offset, limit = 20, details = 'true')
       response = @request.get("#{@url}/#{ACCOUNT}/#{STATEMENT}?branch=#{bank_agency}&account=#{bank_number}&offset=#{offset}&limit=#{limit}&details=#{details}",
-                              [json_header, api_v1_header])
+                              [json_header, api_v1_header, correlation_id])
     end
 
   end
