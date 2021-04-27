@@ -6,7 +6,7 @@ module Bankly
     end
 
     def get_events(query)
-      response = @request.get("#{@url}/#{EVENTS}#{Helper.json_to_url_params(query)}", [json_header, api_v1_header, correlation_id])
+      response = @request.get("#{@url}/#{EVENTS}#{Helper.json_to_url_params(query)}", [json_header, api_v1_header, correlation_id], true)
     end
   end
 end
