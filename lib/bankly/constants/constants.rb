@@ -40,4 +40,7 @@ module Bankly
   # Bank Slip
   BANKSLIP = 'bankslip'
   PDF = 'pdf'
+
+  # Events
+  EVENTS = 'events'
 end
